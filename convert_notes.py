@@ -9,10 +9,10 @@ from subprocess import call
 
 
 # Path to the JSON file we'll read in:
-INPUT_FILE = "./notes.json"
+INPUT_FILE = "/home/rob/Downloads/notes/source/notes.json"
 
 # Path to the directory where we'll save the converted notes:
-OUTPUT_DIRECTORY = "./notes_converted/"
+OUTPUT_DIRECTORY = "/home/rob/obsidian/how.to.make.things/simplenote/"
 
 # Should the creation time of the created files be set to the creation
 # time of the original notes?
@@ -101,7 +101,7 @@ def main():
                 filename = lines[0] + ".md"
                 # Need to remove any forward slashes or colons:
                 filename = filename.replace("/", "").replace(":", "")
-                filepath = os.path.join(OUTPUT_DIRECTORY, filename)
+                filepath = os.path.join(OUTPUT_DIRECTORY, filename[0:50])
 
                 with open(filepath, "w") as outfile:
                     outfile.write("\n".join(lines))
@@ -110,7 +110,7 @@ def main():
                     creation_time = datetime.strptime(
                         note["creationDate"], "%Y-%m-%dT%H:%M:%S.%fZ"
                     ).strftime("%m/%d/%Y %H:%M:%S %p")
-                    call(["SetFile", "-d", creation_time, filepath])
+                    # no setfile, linux! call(["SetFile", "-d", creation_time, filepath])
 
                 if KEEP_ORIGINAL_MODIFIED_TIME is True:
                     # Set the file access and modified times:
