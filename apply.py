@@ -98,10 +98,10 @@ def main():
                         lines.append(tag_text)
 
                 # Create the new filename/path based on the first line of the note:
-                filename = lines[0] + ".md"
+                filename = lines[0][0:50] + '.md'
                 # Need to remove any forward slashes or colons:
                 filename = filename.replace("/", "").replace(":", "")
-                filepath = os.path.join(OUTPUT_DIRECTORY, filename[0:50])
+                filepath = os.path.join(OUTPUT_DIRECTORY, filename)
 
                 with open(filepath, "w") as outfile:
                     outfile.write("\n".join(lines))
