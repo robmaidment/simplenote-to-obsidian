@@ -3,6 +3,7 @@
 import json
 import os
 import re
+import shutil
 import sys
 from datetime import datetime
 from subprocess import call
@@ -36,16 +37,14 @@ def main():
     if not os.path.isfile(INPUT_FILE):
         sys.exit(f"{INPUT_FILE} is not a file")
 
-    tag_position = input("\nWhere should tags be put? Either 'start' or 'end' (default is 'end'):")
+    tag_position = "end"
+    
+    try:
+        shutil.rmtree(OUTPUT_DIRECTORY)
+    except OSError:
+        pass
 
-    if tag_position == "":
-        tag_position = "end"
-
-    if tag_position not in ["start", "end"]:
-        sys.exit("Enter either 'start' or 'end'.")
-
-    if not os.path.isdir(OUTPUT_DIRECTORY):
-        os.mkdir(OUTPUT_DIRECTORY)
+    os.mkdir(OUTPUT_DIRECTORY)
 
     ###################################################################
     # 2. Loop through all the notes and create new ones
@@ -98,9 +97,9 @@ def main():
                         lines.append(tag_text)
 
                 # Create the new filename/path based on the first line of the note:
-                filename = lines[0][0:50] + '.md'
+                filename = lines[0][0:75] + '.md'
                 # Need to remove any forward slashes or colons:
-                filename = filename.replace("/", "").replace(":", "")
+                filename = filename.replace("/", "").replace(":", "").strip()
                 filepath = os.path.join(OUTPUT_DIRECTORY, filename)
 
                 with open(filepath, "w") as outfile:
